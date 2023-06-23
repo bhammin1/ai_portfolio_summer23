@@ -21,8 +21,10 @@
     
 # Repos
 - All file except for the data are in the repo under directory mod4
-    - ()[]
+    - [mod4_git](https://github.com/bhammin1/ai_portfolio_summer23/tree/main/mod4)
 - Docker link 
-    - ()[]
+    - [mod4_docker](https://hub.docker.com/repository/docker/bhammin1/mod4/general)
+    - Pull Image
+        - `docker pull bhammin1/mod4:1.0`
     - To run, do the following command 
         - `docker run -it -v /output:/output bhammin1/mod4:1.0`
