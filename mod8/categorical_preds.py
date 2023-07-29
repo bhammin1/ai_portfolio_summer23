@@ -1,5 +1,8 @@
 import pandas as pd
 import numpy as np
+from sklearn.cluster import KMeans
+import matplotlib.pyplot as plt
+from sklearn import metrics
 
 
 def load_data(path):
@@ -80,20 +83,21 @@ def one_hot(df, col):
     df_c[col] = one_hot_encoding
     return df_c
 
-def prep_for_training(df, label):
+def prep_for_training(df, label, superInd =False):
     '''
     To feed data into a ML model like NN,
     we need the data split into a features and label
     and the data should be stored in numpy arrays instead of pandas dfs
     '''
     cols = df.columns.tolist()
-    cols.remove(label)
+    if superInd:
+        cols.remove(label)
     
-    y = df[label].to_numpy()
-    x = df[cols].to_numpy()
+    y = df[label]
+    x = df[cols]
     return x, y
 
-def all_prep(file):
+def all_prep(file, superInd=True):
     carsDf = load_data(file)
     # convert True and False to 0 and 1
     carsDf = bool_to_bin(carsDf)
@@ -121,11 +125,43 @@ def all_prep(file):
     carsDf= remove_missing(carsDf)
 
     # convert data to be feed into a ML model
-    x, y = prep_for_training(carsDf,"price_usd")
+    x, y = prep_for_training(carsDf,"price_usd", superInd)
 
     return x, y, carsDf
 
 
 
 if __name__ == "__main__":
-    x,y, df = all_prep("../data/cars.csv")
+    x,y, df = all_prep("../data/cars.csv",False)
+
+    # kmeans with 2 clusters
+    kmeans_2 = KMeans(n_clusters=2, random_state=0, n_init="auto").fit(x)
+    kmeans_2_labels = kmeans_2.labels_
+
+    # Get Inertia
+    print("Inertia Score for 2 Clusters",kmeans_2.inertia_)
+    sil_score_2 = metrics.silhouette_score(x, kmeans_2_labels)
+    print("Silhouette Score for 2 Clusters", sil_score_2)
+    dave_score_2 = metrics.davies_bouldin_score(x, kmeans_2_labels)
+    print("Davies-Bouldin  for 2 Clusters", sil_score_2)
+
+    # kmeans with 5 clusters
+    kmeans_5 = KMeans(n_clusters=5, random_state=0, n_init="auto").fit(x)
+    kmeans_5_labels = kmeans_5.labels_
+
+    print("Inertia Score for 5 Clusters",kmeans_5.inertia_)
+    sil_score_5 = metrics.silhouette_score(x, kmeans_5_labels)
+    print("Silhouette Score for 5 Clusters", sil_score_5)
+    dave_score_5 = metrics.davies_bouldin_score(x, kmeans_5_labels)
+    print("Davies-Bouldin  for 5 Clusters", sil_score_5)
+
+
+    # kmeans with 10 clusters
+    kmeans_10 = KMeans(n_clusters=10, random_state=0, n_init="auto").fit(x)
+    kmeans_10_labels = kmeans_10.labels_
+    # Get Inertia
+    print("Inertia Score for 10 Clusters",kmeans_10.inertia_)
+    sil_score_10 = metrics.silhouette_score(x, kmeans_10_labels)
+    print("Silhouette Score for 10 Clusters", sil_score_10)
+    dave_score_10 = metrics.davies_bouldin_score(x, kmeans_10_labels)
+    print("Davies-Bouldin  for 10 Clusters", sil_score_10)
