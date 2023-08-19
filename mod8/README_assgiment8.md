@@ -39,3 +39,15 @@
 # Repos
 - All files are in the repo under directory mod8
     - [mod8_git](https://github.com/bhammin1/ai_portfolio_summer23/tree/main/mod8)
+# Docker
+- Pull Docker image
+    - `docker pull bhammin1/mod8:5.0`
+    - [mod8 image](https://hub.docker.com/repository/docker/bhammin1/mod8/general)
+- Build image from docker file
+    - `docker build -t bhammin1/mod8:5.0 -f C:\workspace\ai_portfolio_summer23\mod8\Dockerfile .       `
+
+- Run docker image
+    - `docker run --restart=unless-stopped -it -p 8888:8888 -v C:\workspace\ai_portfolio_summer23\mod8:/workspace  bhammin1/mod8:5.0`
+        - Note `C:\workspace\ai_portfolio_summer23\mod8` should be your local path to this git repo
+    - Then start jupyter http://127.0.0.1:8888/lab
+    - Run the notebook `k_means_bhammin1.ipynb`
